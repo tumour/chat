@@ -37,6 +37,18 @@ services:
       - ./persistent_data/mysql:/var/lib/mysql
     container_name: mysql
 
+  mysql_testing:
+    build:
+      context: ./deployment/docker/mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: chat_testing
+      MYSQL_USER: chat_testing
+      MYSQL_PASSWORD: chat_testing
+      MYSQL_ROOT_PASSWORD: root
+    container_name: mysql_testing
+
   phpmyadmin:
     build: ./deployment/docker/phpmyadmin
     environment:
