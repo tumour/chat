@@ -1,14 +1,12 @@
-/.idea  
+/.idea
 /node_modules
 /public/hot
 /public/storage
-/public/mix-manifest.json
-/public/css
-/public/js
 /storage/*.key
 /vendor
 .env
 .env.backup
+.env.testing
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
