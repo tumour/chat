@@ -13,5 +13,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('register','AuthController@register')->middleware('guest');
-Route::post('login', 'AuthController@login')->middleware('guest');
+Route::post('auth/register','AuthController@register')->middleware('guest');
+Route::post('auth/login', 'AuthController@login')->middleware('guest');
