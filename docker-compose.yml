@@ -61,4 +61,3 @@ services:
     depends_on:
       - mysql
     container_name: pma
-
