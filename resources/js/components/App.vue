@@ -1,9 +1,9 @@
 <template>
-    <div class="container">
-        <h1>Hello, world</h1>
-    </div>
+    <router-view></router-view>
 </template>
 
 <script>
+    export default {
 
+    }
 </script>
