@@ -20,6 +20,9 @@ RUN apt-get install -y \
     libzip-dev \
     && docker-php-ext-install zip
 
+# Install Redis
+RUN pecl install redis && docker-php-ext-enable redis
+
 RUN useradd -G www-data,root -u 1000 -d /home/chat chat
 
 WORKDIR /var/www
