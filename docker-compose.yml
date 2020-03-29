@@ -67,6 +67,8 @@ services:
       - "6001:6001"
     depends_on:
       - redis
+      - nginx
+      - php-fpm
     container_name: laravel-echo-server
 
   phpmyadmin:

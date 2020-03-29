@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('chat.{chatId}', function () {
+Broadcast::channel('chat.{chatId}', function (\App\User $user, $chatId) {
+    $accessToChat = $user->chats()->where('chats.id', $chatId)->first();
+    if ($accessToChat == null) {
+        return false;
+    }
     return true;
 });

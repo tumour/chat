@@ -8,6 +8,7 @@ use App\Http\Requests\V1\Chat\MessageRequest;
 use App\Http\Resources\V1\ChatMessageResource;
 use App\Models\Chat;
 use App\Models\ChatMessage;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
  * Контроллер для работы с сообщениями чата
@@ -25,8 +26,6 @@ class MessageController extends Controller
      */
     public function index(Chat $chat)
     {
-        $chat->users()->where('users.id', auth()->user()->id)->firstOrFail();
-
         $chatMessages = ChatMessage::with('user:id,nickname,created_at')
             ->where('chat_id', $chat->id)
             ->get();
@@ -41,13 +40,20 @@ class MessageController extends Controller
      */
     public function store(Chat $chat, MessageRequest $request)
     {
+        $accessToChat = $chat->users()->where('users.id', auth()->user()->id)->first();
+        if ($accessToChat === null) {
+            throw new ModelNotFoundException();
+        }
+
         $chatMessage = ChatMessage::create([
             'chat_id' => $chat->id,
             'user_id' => auth()->user()->id,
             'message' => $request->message,
         ]);
 
-        broadcast(new MessageSent($chatMessage))->toOthers();
+        $chatMessagesResource = new ChatMessageResource($chatMessage);
+
+        broadcast(new MessageSent($chatMessagesResource))->toOthers();
 
         return response()->json(['success' => true]);
     }

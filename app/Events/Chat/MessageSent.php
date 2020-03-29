@@ -2,8 +2,7 @@
 
 namespace App\Events\Chat;
 
-use App\Models\ChatMessage;
-use Illuminate\Broadcasting\Channel;
+use App\Http\Resources\V1\ChatMessageResource;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -17,19 +16,19 @@ class MessageSent implements ShouldBroadcast
     /**
      * Message details
      *
-     * @var ChatMessage
+     * @var ChatMessageResource
      */
-    public ChatMessage $message;
+    public ChatMessageResource $message;
 
     /**
      * Create a new event instance.
      *
      * MessageSent constructor.
-     * @param ChatMessage $message
+     * @param ChatMessageResource $chatMessageResource
      */
-    public function __construct(ChatMessage $message)
+    public function __construct(ChatMessageResource $chatMessageResource)
     {
-        $this->message = $message;
+        $this->message = $chatMessageResource;
     }
 
     /**
@@ -39,6 +38,16 @@ class MessageSent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('chat.'.$this->message->chat_id);
+        return new PrivateChannel('chat.'.$this->message    ->chat_id);
+    }
+
+    /**
+     * The event's broadcast name.
+     *
+     * @return string
+     */
+    public function broadcastAs()
+    {
+        return 'message.sent';
     }
 }

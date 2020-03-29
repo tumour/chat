@@ -56,7 +56,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="type_msg">
+                    <div class="type_msg" v-if="! isEmptySelectedChat()">
                         <div class="input_msg_write">
                             <input
                                 type="text"
@@ -79,14 +79,13 @@
 </template>
 
 <script>
-    import Chats from "./Chats";
     import DefaultAvatar from "./DefaultAvatar";
 
     import ApiChat from './../api/chat';
     import moment from "moment";
 
     export default {
-        components: { DefaultAvatar, Chats },
+        components: { DefaultAvatar },
         data() {
             return {
                 chats: [],
@@ -98,9 +97,15 @@
         mounted() {
             this.$watch('selectedChat', function () {
                 Echo.private(`chat.${this.selectedChat.id}`)
-                    .listen('MessageSent', (data) => {
-                        console.log(data);
+                    .listen('.message.sent', (data) => {
+                        this.messages.push(data.message);
+
+                        _.find(this.chats, this.selectedChat).last_message = data.message.message;
                     });
+            });
+
+            this.$watch('messages', function () {
+                this.scrollToEnd();
             });
         },
         created() {
@@ -137,14 +142,18 @@
                 }
 
                 if (this.newMessage) {
-                    ApiChat.sendMessage(chat.id, data).then((response) => {
-
-                    });
+                    ApiChat.sendMessage(chat.id, data);
                 }
+
+                this.newMessage = null;
             },
             isAuthUserMessage(messageUser) {
                 return auth.user.id === messageUser.id;
-            }
+            },
+            scrollToEnd() {
+                var container = this.$el.querySelector(".msg_history");
+                container.scrollTop = container.scrollHeight;
+            },
         },
     }
 </script>
