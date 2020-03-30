@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Broadcast;
+use App\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,9 +14,9 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('chat.{chatId}', function (\App\User $user, $chatId) {
+Broadcast::channel('chat.{chatId}', function (User $user, $chatId) {
     $accessToChat = $user->chats()->where('chats.id', $chatId)->first();
-    if ($accessToChat == null) {
+    if ($accessToChat === null) {
         return false;
     }
     return true;

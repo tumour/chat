@@ -23,6 +23,11 @@ use Illuminate\Validation\ValidationException;
 class AuthenticationController extends Controller
 {
     /**
+     * Длина api token
+     */
+    private const API_TOKEN_LENGTH = 60;
+
+    /**
      * @var UserRepository
      */
     private UserRepository $userRepository;
@@ -83,7 +88,7 @@ class AuthenticationController extends Controller
     {
         if (Hash::check($password, $user->password)) {
 
-            $token = Str::random(60);
+            $token = Str::random(self::API_TOKEN_LENGTH);
 
             $user->api_token = hash('sha256', $token);
             $user->save();
@@ -105,7 +110,7 @@ class AuthenticationController extends Controller
      */
     protected function register(array $data): UserResource
     {
-        $data['api_token'] = Str::random(60);
+        $data['api_token'] = Str::random(self::API_TOKEN_LENGTH);
 
         $user = $this->userRepository->create($data);
 
