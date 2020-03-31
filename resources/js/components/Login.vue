@@ -29,7 +29,7 @@
             //
         },
         methods: {
-            auth () {
+            auth() {
                 let data = {
                     nickname: this.nickname,
                     password: this.password
@@ -38,9 +38,9 @@
                 ApiAuth.authentication(data)
                     .then((response) => {
                         auth.login(response.data.api_token, response.data.data);
-
-                        this.$router.push('/');
                     });
+
+                setTimeout(() => this.$router.push('/'), 1000);
             }
         }
     }

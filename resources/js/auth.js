@@ -17,6 +17,8 @@ class Auth
 
         this.apiToken = apiToken;
         this.user = user;
+
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.apiToken;
     }
 
     check() {
