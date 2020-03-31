@@ -40,6 +40,7 @@
                         auth.login(response.data.api_token, response.data.data);
                     });
 
+                //TODO: Придумать лучше решение
                 setTimeout(() => this.$router.push('/'), 1000);
             }
         }
